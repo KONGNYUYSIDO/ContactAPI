@@ -29,6 +29,8 @@ const options = {
             description: 'Endpoints to manage contacts',
             name: 'User Management',
             description: 'Endpoints to manage registered users',
+            name: 'TODO List',
+            description: 'Endpoints to manage the TODO List',
         }
     },
     apis: ['./routes/contactRoute.js']

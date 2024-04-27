@@ -10,6 +10,7 @@ import { Register } from "../controllers/userController.js";
 import { Login } from "../controllers/userController.js";
 
 import checkToken from "../middlewares/auth.js";
+import { getTodos } from "../controllers/todoController.js";
 
 
 const router = express.Router();
@@ -34,6 +35,18 @@ const router = express.Router();
  *                      example: user@gmail.com
  *                  password:
  *                      type: string
+ *          Todo:
+ *              properties:
+ *                  task:
+ *                      type: string
+ *                  status:
+ *                      type: string
+ *                  dueDate:
+ *                      type: string
+ *                      format: date
+ *                  createdAt:
+ *                      type: string
+ *                      format: date
  *          Contact:
  *              properties:
  *                  firstName:
@@ -270,6 +283,29 @@ router.post('/users/register', Register );
  *                  description: Bad request
  */
 router.post('/users/login', Login );
+
+
+
+/**
+ * 
+ * @swagger
+ * /user/todo_list:
+ *      get:
+ *          summary: Getting all the tasks in the list
+ *          description: User can retrieve all the different tasks in the todo list
+ *          tags:
+ *              - TODO List
+ *          security:
+ *              - bearerAuth: []
+ *          responses:
+ *              200: 
+ *                  description: Successful request
+ *              400:
+ *                  description: Failed/Bad request
+ *              500:
+ *                  description: Internal Server Error
+ */
+router.get('/user/todo_list', checkToken, getTodos )
 
 
 
