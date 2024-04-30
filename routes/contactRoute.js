@@ -10,7 +10,7 @@ import { Register } from "../controllers/userController.js";
 import { Login } from "../controllers/userController.js";
 
 import checkToken from "../middlewares/auth.js";
-import { getTodos } from "../controllers/todoController.js";
+import { completedTodo, createTodo, deleteTodo, getTodos, uncompletedTodo, updateTodo } from "../controllers/todoController.js";
 
 
 const router = express.Router();
@@ -39,8 +39,10 @@ const router = express.Router();
  *              properties:
  *                  task:
  *                      type: string
- *                  status:
+ *                  Status:
  *                      type: string
+ *                      enum: [ 'pending', 'in_progress', 'completed' ]
+ *                      default: 'pending'
  *                  dueDate:
  *                      type: string
  *                      format: date
@@ -305,7 +307,148 @@ router.post('/users/login', Login );
  *              500:
  *                  description: Internal Server Error
  */
-router.get('/user/todo_list', checkToken, getTodos )
+router.get('/user/todo_list', checkToken, getTodos );
+
+
+
+/** 
+ * 
+ * @swagger
+ * /user/new/todo_list:
+ *      post:
+ *          summary: Adding a new Task
+ *          description: The user can add new task(s)
+ *          tags:
+ *              - TODO List
+ *          security:
+ *              - bearerAuth: []
+ *          requestBody:
+ *              required: true
+ *              content: 
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#components/schemas/Todo'
+ *          responses:
+ *              200:
+ *                  description: successful
+ *              400: 
+ *                  description: Bad request
+ *              500: 
+ *                  description: Internal Server Error
+*/
+router.post('/user/new/todo_list', checkToken, createTodo );
+
+
+
+
+/**
+ * @swagger
+ * /user/update/todo_list/{id}:
+ *      put:
+ *          summary: Modifying a task
+ *          description: User updates a task if any change be made
+ *          tags:
+ *              - TODO List
+ *          security:
+ *              - bearerAuth: []
+ *          parameters:
+ *              - in: path
+ *                name: id
+ *                required: true
+ *                format: objectId
+ *                schema:
+ *                  type: string
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#components/schemas/Todo'
+ *          responses:
+ *              200: 
+ *                  description: Successful
+ *              400: 
+ *                  description: Failed
+ *              500: 
+ *                  description: Internal Server Error
+ */
+router.put('/user/update/todo_list/:id', checkToken, updateTodo );
+
+
+
+
+
+/**
+ * 
+ * @swagger
+ * /user/todo_list/completed:
+ *      get:
+ *          summary: Retrieve completed tasks
+ *          description: User can view the list of completed tasks
+ *          tags:
+ *              - TODO List
+ *          security:
+ *              - bearerAuth: []
+ *          responses:
+ *              200:
+ *                  description: success
+ *              500:
+ *                  description: Internal Server Error
+ */
+router.get('/user/todo_list/completed', checkToken, completedTodo );
+
+
+
+
+/**
+ * 
+ * @swagger
+ * /user/delete/todo_list/{id}:
+ *      delete:
+ *          summary: Deleting task(s)
+ *          description: User can delete tasks not needed anymore
+ *          tags:
+ *              - TODO List
+ *          security:
+ *              - bearerAuth: []
+ *          parameters:
+ *              - in: path
+ *                name: id
+ *                required: true
+ *                format: objectId
+ *                schema:
+ *                      type: string
+ *          responses:
+ *              200:
+ *                  description: successful
+ *              400: 
+ *                  description: Failed
+ *              500: 
+ *                  description: Internal Server Error
+ */
+router.delete('/user/delete/todo_list/:id', checkToken, deleteTodo );
+
+
+
+
+/**
+ * 
+ * @swagger
+ * /user/todo_list/uncompleted:
+ *      get:
+ *          summary: Retrieve uncompleted task(s)
+ *          description: User can view a list of tasks to be dealt with/completed
+ *          tags:
+ *              - TODO List
+ *          security: 
+ *              - bearerAuth: []
+ *          responses:
+ *              200:
+ *                  description: successful
+ *              500:
+ *                  description: Internal Server Error
+ */
+router.get('/user/todo_list/uncompleted', checkToken, uncompletedTodo );
 
 
 

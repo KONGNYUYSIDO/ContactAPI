@@ -35,8 +35,8 @@ export async function Login( req, res ) {
         return res.status(401).json({ status: "Failed", message: "Invalid username or password" });
     }
 
-    const token = jwt.sign({ _id: user._id }, 'c1ab1847-32a0-4ea2-af4c-ae82a037e337', {expiresIn: "5m"});
-    res.status(200).json({ status: "Success", message: "Successfully Logged In", data: {access_token: token, token_validity: "5m"} });
+    const token = jwt.sign({ _id: user._id }, 'c1ab1847-32a0-4ea2-af4c-ae82a037e337', {expiresIn: "20m"});
+    res.status(200).json({ status: "Success", message: "Successfully Logged In", data: {access_token: token, token_validity: "20m"} });
 
     // const Refreshtoken = jwt.sign({ _id: user._id }, 'c1ab1847-32a0-4ea2-af4c-ae82a037e337', {expiresIn: "5m"});
     // res.json({ Refreshtoken });
